@@ -1,1 +1,1 @@
-console.log("Hello Bot Worlds")
+import "./bot"
