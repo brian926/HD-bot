@@ -44,40 +44,19 @@ export function createRestApi(client: Client) {
 
     app.post("/resolve", async (req, res) => {
         const { threadId } = req.query
-        // if(!threadId) {
-        //     return res.status(400).send("Missing threadId")
-        // }
-
-        // const thread = await client.channels.fetch(threadId as string) as ThreadChannel
-        // if(!thread) {
-        //     return res.status(404).send("Thread with this id was not found")
-        // }
-        const thread = checkT(threadId, res)
-
-        await (await thread).Thread.send("This conversation is marked as resolved and thread will be archived")
-        await (await thread).Thread.setArchived(true)
-        return (await thread).Res.send("Thread resolved")
-    })
-
-    async function checkT(threadId: any, res: Response) {
-        const resT = res.status(200)
         if(!threadId) {
-            const resT = res.status(400).send("Missing threadId")
+            return res.status(400).send("Missing threadId")
         }
-        
+
         const thread = await client.channels.fetch(threadId as string) as ThreadChannel
         if(!thread) {
-            const resT = res.status(404).send("Thread with this id was not found")
+            return res.status(404).send("Thread with this id was not found")
         }
 
-        const test: ThreadT = {
-            ThreadId: threadId,
-            Thread: thread,
-            Res: resT
-        }
-
-        return test
-    }
+        await thread.send("This conversation is marked as resolved and thread will be archived")
+        await thread.setArchived(true)
+        return thread.send("Thread resolved")
+    })
 
     return app
 }
