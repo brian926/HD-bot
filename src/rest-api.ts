@@ -1,6 +1,5 @@
 import { Client, ThreadChannel } from "discord.js"
 import express from "express"
-import { Response } from "express"
 
 export function createRestApi(client: Client) {
     const app = express()
@@ -35,12 +34,6 @@ export function createRestApi(client: Client) {
         await thread.send(text)
         return res.status(200).send("Message sent")
     })
-
-    type ThreadT = {
-        ThreadId: string,
-        Thread: ThreadChannel,
-        Res: Response
-    }
 
     app.post("/resolve", async (req, res) => {
         const { threadId } = req.query
